@@ -179,7 +179,7 @@ const App: React.FC = () => {
         {/* This is the component that will be captured */}
         <div ref={captureRef} className="bg-white p-8">
             <div className="w-full">
-              <h1 className="text-3xl text-gray-800">AVX hub</h1>
+              <h1 className="text-3xl text-gray-800">MVX hub</h1>
               <p className="text-xl text-gray-600 mb-6">{dateString}</p>
               
               <table className="w-full text-left border-collapse">
@@ -195,13 +195,13 @@ const App: React.FC = () => {
                   {rows.map((row, index) => (
                     <tr key={row.id}>
                       <td className="p-2 border-b border-gray-200">
-                        <input type="text" value={row.van} onChange={(e) => handleUpdateRow(row.id, 'van', e.target.value)} className="w-full bg-transparent focus:outline-none focus:bg-slate-100 rounded px-1 text-lg" placeholder="e.g. CJB-MAA"/>
+                        <input type="text" value={row.van} onChange={(e) => handleUpdateRow(row.id, 'van', e.target.value)} className="w-full bg-transparent focus:outline-none focus:bg-slate-100 rounded px-1 text-md" placeholder="e.g. CJB-MAA"/>
                       </td>
                       <td className="p-2 border-b border-gray-200">
-                         <input type="text" value={row.eWaybill} onChange={(e) => handleUpdateRow(row.id, 'eWaybill', e.target.value)} className="w-full bg-transparent focus:outline-none focus:bg-slate-100 rounded px-1 text-lg text-center" placeholder="—" />
+                         <input type="text" value={row.eWaybill} onChange={(e) => handleUpdateRow(row.id, 'eWaybill', e.target.value)} className="w-full bg-transparent focus:outline-none focus:bg-slate-100 rounded px-1 text-md text-center" placeholder="—" />
                       </td>
                       <td className="p-2 border-b border-gray-200">
-                         <input type="text" value={row.invoice} onChange={(e) => handleUpdateRow(row.id, 'invoice', e.target.value)} className="w-full bg-transparent focus:outline-none focus:bg-slate-100 rounded px-1 text-lg text-center" placeholder="0" />
+                         <input type="text" value={row.invoice} onChange={(e) => handleUpdateRow(row.id, 'invoice', e.target.value)} className="w-full bg-transparent focus:outline-none focus:bg-slate-100 rounded px-1 text-md text-center" placeholder="0" />
                       </td>
                       <td className="p-2 border-b border-gray-200 text-center">
                         <button onClick={() => handleRemoveRow(row.id)} className="text-gray-400 hover:text-red-500">

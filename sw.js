@@ -1,4 +1,5 @@
-const CACHE_NAME = 'van-bill-manager-v1';
+
+const CACHE_NAME = 'van-bill-manager-v6';
 const URLS_TO_CACHE = [
   '/',
   '/index.html',
@@ -10,29 +11,17 @@ const URLS_TO_CACHE = [
   'https://cdnjs.cloudflare.com/ajax/libs/html-to-image/1.11.11/html-to-image.min.js'
 ];
 
-// Install event: cache the application shell
 self.addEventListener('install', event => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then(cache => {
-        console.log('Opened cache and caching app shell');
-        return cache.addAll(URLS_TO_CACHE);
+        // We attempt to cache core assets, but don't fail the install if one fails
+        return cache.addAll(URLS_TO_CACHE).catch(err => console.error("Cache addAll failed", err));
       })
   );
+  self.skipWaiting();
 });
 
-// Fetch event: serve from cache, fall back to network
-self.addEventListener('fetch', event => {
-  event.respondWith(
-    caches.match(event.request)
-      .then(response => {
-        // Return response from cache if found, otherwise fetch from network
-        return response || fetch(event.request);
-      })
-  );
-});
-
-// Activate event: clean up old caches
 self.addEventListener('activate', event => {
   const cacheWhitelist = [CACHE_NAME];
   event.waitUntil(
@@ -40,11 +29,46 @@ self.addEventListener('activate', event => {
       return Promise.all(
         cacheNames.map(cacheName => {
           if (cacheWhitelist.indexOf(cacheName) === -1) {
-            console.log('Deleting old cache:', cacheName);
             return caches.delete(cacheName);
           }
         })
       );
     })
+  );
+  self.clients.claim();
+});
+
+self.addEventListener('fetch', event => {
+  // Navigation requests (HTML) - Network First, fall back to Cache
+  if (event.request.mode === 'navigate') {
+    event.respondWith(
+      fetch(event.request)
+        .catch(() => {
+          return caches.match('/index.html') || caches.match('/');
+        })
+    );
+    return;
+  }
+
+  // Other requests - Stale While Revalidate or Cache First
+  event.respondWith(
+    caches.match(event.request)
+      .then(response => {
+        // Return cached response if found
+        if (response) {
+          return response;
+        }
+        // Otherwise network
+        return fetch(event.request).then(response => {
+          // Check if valid response
+          if (!response || response.status !== 200 || response.type !== 'basic') {
+            return response;
+          }
+          // Clone and cache (optional, be careful with opaque responses from CDNs)
+          // For this specific setup, we rely on the install step for caching core assets
+          // to avoid cross-origin issues with the CDNs in the fetch handler.
+          return response;
+        });
+      })
   );
 });

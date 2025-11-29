@@ -1,5 +1,5 @@
 
-const CACHE_NAME = 'van-bill-manager-v6';
+const CACHE_NAME = 'van-bill-manager-v7';
 const URLS_TO_CACHE = [
   '/',
   '/index.html',
@@ -64,9 +64,6 @@ self.addEventListener('fetch', event => {
           if (!response || response.status !== 200 || response.type !== 'basic') {
             return response;
           }
-          // Clone and cache (optional, be careful with opaque responses from CDNs)
-          // For this specific setup, we rely on the install step for caching core assets
-          // to avoid cross-origin issues with the CDNs in the fetch handler.
           return response;
         });
       })

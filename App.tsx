@@ -217,7 +217,7 @@ const App: React.FC = () => {
           <div className="mx-auto flex max-w-3xl items-center justify-between gap-3">
             <div className="min-w-0">
                 <h1 className="text-2xl font-extrabold leading-tight">Van Bill Manager</h1>
-                <p className="mt-1 text-sm font-medium text-emerald-50">
+                <p className="mt-1 text-base font-semibold text-emerald-50">
                     {formatDateForDisplay(reportDate)}
                 </p>
             </div>
@@ -388,7 +388,7 @@ const App: React.FC = () => {
                 >
                     <div className="overflow-hidden rounded-xl border border-[#d6eee5] bg-[#f4f8f6]">
                         <div className="min-h-[132px] bg-[#0b8d65] px-4 py-4 sm:px-6">
-                            <p className="text-sm font-bold text-white">
+                            <p className="text-lg font-bold text-white">
                                 {reportDateParts.date} <span className="mx-1 text-white/70">·</span> {reportDateParts.day}
                             </p>
                             <h1 className="mt-2 text-[clamp(32px,8vw,44px)] font-extrabold leading-none tracking-[-0.05em] text-white">

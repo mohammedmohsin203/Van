@@ -44,8 +44,9 @@ const App: React.FC = () => {
     const day = String(now.getDate()).padStart(2, '0');
     return `${year}-${month}-${day}`;
   });
-  const [footerName, setFooterName] = useState("- Basheer Ahamed");
-  const [footerSubtitle, setFooterSubtitle] = useState("");
+  const [footerName, setFooterName] = useState("Basheer Ahamed");
+  const [footerSubtitle, setFooterSubtitle] = useState("TPC / MAA / MVX");
+  const [showVanOut, setShowVanOut] = useState(true);
 
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isExporting, setIsExporting] = useState<boolean>(false);
@@ -171,7 +172,7 @@ const App: React.FC = () => {
           pixelRatio: 3,
           backgroundColor: '#ffffff',
           style: {
-             minWidth: '700px', 
+             minWidth: '590px',
              maxWidth: 'none',
              transform: 'none'
           }
@@ -329,125 +330,126 @@ const App: React.FC = () => {
         <section className="bg-white rounded-xl shadow-md overflow-hidden border border-slate-200">
             <div className="bg-slate-50/50 px-5 py-3 border-b border-slate-100 flex justify-between items-center backdrop-blur-sm">
                  <h2 className="text-xs font-bold text-slate-400 uppercase tracking-wider">Preview</h2>
+                 <label className="flex items-center gap-2 text-xs font-semibold text-slate-600 cursor-pointer select-none">
+                    <input
+                        type="checkbox"
+                        checked={showVanOut}
+                        onChange={e => setShowVanOut(e.target.checked)}
+                        className="h-4 w-4 rounded border-slate-300 text-emerald-700 focus:ring-emerald-600"
+                    />
+                    Add VAN OUT column
+                 </label>
             </div>
             
-            <div className="overflow-hidden w-full relative">
-                <div 
-                    ref={captureRef} 
-                    className={`bg-white p-6 sm:p-8 w-full transition-all duration-300 ${isExporting ? 'min-w-[700px]' : ''}`}
+            <div className="grid grid-cols-2 gap-3 p-4 border-b border-slate-100">
+                <label className="text-[10px] font-bold uppercase tracking-wide text-slate-400">
+                    Report title
+                    <input value={title} onChange={e => setTitle(e.target.value)} className="mt-1 w-full rounded-md border border-slate-200 px-2 py-1.5 text-xs font-medium normal-case tracking-normal text-slate-700" />
+                </label>
+                <label className="text-[10px] font-bold uppercase tracking-wide text-slate-400">
+                    Report date
+                    <input type="date" value={reportDate} onChange={e => setReportDate(e.target.value)} className="mt-1 w-full rounded-md border border-slate-200 px-2 py-1.5 text-xs font-medium normal-case tracking-normal text-slate-700" />
+                </label>
+                <label className="text-[10px] font-bold uppercase tracking-wide text-slate-400">
+                    Footer name
+                    <input value={footerName} onChange={e => setFooterName(e.target.value)} className="mt-1 w-full rounded-md border border-slate-200 px-2 py-1.5 text-xs font-medium normal-case tracking-normal text-slate-700" />
+                </label>
+                <label className="text-[10px] font-bold uppercase tracking-wide text-slate-400">
+                    Footer subtitle
+                    <input value={footerSubtitle} onChange={e => setFooterSubtitle(e.target.value)} className="mt-1 w-full rounded-md border border-slate-200 px-2 py-1.5 text-xs font-medium normal-case tracking-normal text-slate-700" />
+                </label>
+            </div>
+
+            <div className="overflow-x-auto w-full">
+                <div
+                    ref={captureRef}
+                    className={`mx-auto w-full max-w-[590px] bg-[#e7efeb] px-[22px] pt-3 pb-7 font-sans ${isExporting ? 'min-w-[590px]' : ''}`}
                 >
-                    {/* Header */}
-                    <div className="mb-8 flex justify-between items-start">
-                        <div className="flex-1">
-                            {isExporting ? (
-                                <h1 className="text-3xl text-slate-800 font-extrabold tracking-tight mb-1">{title}</h1>
-                            ) : (
-                                <input 
-                                    value={title}
-                                    onChange={e => setTitle(e.target.value)}
-                                    className="text-3xl text-slate-800 font-extrabold tracking-tight mb-1 w-full border-none focus:ring-0 p-0 placeholder-slate-300 bg-transparent"
-                                    placeholder="Title"
-                                />
-                            )}
-                            
-                            {isExporting ? (
-                                <p className="text-lg text-slate-500 font-medium">{formatDateForDisplay(reportDate)}</p>
-                            ) : (
-                                <input 
-                                    type="date"
-                                    value={reportDate}
-                                    onChange={e => setReportDate(e.target.value)}
-                                    className="text-lg text-slate-500 font-medium border-none focus:ring-0 p-0 font-sans bg-transparent"
-                                />
-                            )}
+                    <p className="mb-2 text-[14px] font-bold tracking-wide text-[#075f48]">2h · Emerald &amp; Coral</p>
+                    <div className="overflow-hidden bg-[#f4f8f6]">
+                        <div className="h-[205px] bg-[#0b8d65] px-6 pt-8">
+                            <div className="flex items-center justify-between gap-3">
+                                <p className="flex items-center gap-2 text-[11px] font-bold tracking-[0.18em] text-white">
+                                    <span className="h-2 w-2 rounded-full bg-[#ffc85a]" />
+                                    DAILY VAN REPORT
+                                </p>
+                                <p className="shrink-0 rounded-full bg-white px-4 py-2 text-xs font-bold text-[#078760]">
+                                    {formatDateForDisplay(reportDate).split(' ').slice(0, 1)}
+                                    <span className="mx-2 text-slate-300">|</span>
+                                    <span className="font-medium text-[#ed6b64]">{formatDateForDisplay(reportDate).split(' ').slice(1).join(' ')}</span>
+                                </p>
+                            </div>
+                            <h1 className="mt-3 text-[clamp(34px,8vw,56px)] font-extrabold leading-tight tracking-[-0.06em] text-white">
+                                {title.trim().split(/\s+/).slice(0, -1).join(' ')}{' '}
+                                <span className="text-[#ffc85a]">{title.trim().split(/\s+/).slice(-1)}</span>
+                            </h1>
                         </div>
-                    </div>
 
-                    {/* Table */}
-                    <div className="border border-slate-200 rounded-lg overflow-hidden">
-                        <table className="w-full text-left border-collapse table-fixed">
-                            <thead>
-                                <tr className="bg-slate-50 border-b border-slate-200">
-                                    <th className="py-2 px-2 border-r border-slate-200 text-[10px] font-bold text-slate-500 uppercase tracking-wider w-auto text-left">VAN</th>
-                                    <th className="py-2 px-2 border-r border-slate-200 text-[10px] font-bold text-slate-500 uppercase tracking-wider w-[20%] text-center">VAN OUT</th>
-                                    <th className="py-2 px-2 border-r border-slate-200 text-[10px] font-bold text-slate-500 uppercase tracking-wider w-[20%] text-center">EWAY</th>
-                                    <th className="py-2 px-2 border-r border-slate-200 text-[10px] font-bold text-slate-500 uppercase tracking-wider w-[15%] text-center">INV</th>
-                                    {!isExporting && <th className="py-2 w-16 text-center bg-slate-50">Action</th>}
-                                </tr>
-                            </thead>
-                            <tbody className="divide-y divide-slate-100">
-                                {rows.length === 0 ? (
-                                    <tr>
-                                        <td colSpan={5} className="p-8 text-center text-slate-400 text-sm font-medium">
-                                            No items added yet
-                                        </td>
+                        <div className="relative mx-6 -mt-[43px] overflow-hidden rounded-[14px] border border-[#d6eee5] bg-white shadow-[0_12px_24px_rgba(20,80,60,0.12)]">
+                            <table className="w-full table-fixed border-collapse text-left">
+                                <thead>
+                                    <tr className="h-[42px] bg-[#e8f6f1]">
+                                        <th className="w-[56px] border-r border-[#d6eee5] px-2 text-center text-[11px] font-bold text-[#315d50]">S.NO</th>
+                                        <th className={`border-r border-[#d6eee5] px-3 text-[11px] font-bold text-[#315d50] ${showVanOut ? '' : 'w-[38%]'}`}>VAN</th>
+                                        {showVanOut && <th className="w-[87px] border-r border-[#d6eee5] px-1 text-center text-[11px] font-bold text-[#315d50]">VAN OUT</th>}
+                                        <th className="w-[87px] border-r border-[#d6eee5] px-1 text-center text-[11px] font-bold text-[#078760]">EWAY</th>
+                                        <th className="w-[86px] px-1 text-center text-[11px] font-bold text-[#ef5b55]">INV</th>
+                                        {!isExporting && <th className="w-16 bg-[#e8f6f1] text-center text-[10px] font-bold text-slate-400">ACTION</th>}
                                     </tr>
-                                ) : (
-                                    rows.map((row) => (
-                                        <tr key={row.id} className="group hover:bg-slate-50/50 transition-colors">
-                                            <td className="py-3 px-2 border-r border-slate-100 align-middle">
-                                                <div className={`text-sm font-medium text-slate-700 ${isExporting ? 'whitespace-pre-wrap break-words' : 'truncate'}`}>
-                                                    {row.van || '-'}
-                                                </div>
+                                </thead>
+                                <tbody>
+                                    {rows.length === 0 ? (
+                                        <tr>
+                                            <td colSpan={2 + Number(showVanOut) + 2 + Number(!isExporting)} className="p-8 text-center text-sm font-medium text-slate-400">
+                                                No items added yet
                                             </td>
-                                            <td className="py-3 px-2 border-r border-slate-100 text-center align-middle">
-                                                <div className="text-sm font-medium text-slate-600 whitespace-nowrap">{row.vanOut || '—'}</div>
-                                            </td>
-                                            <td className="py-3 px-2 border-r border-slate-100 text-center align-middle">
-                                                 <div className={`text-sm font-medium text-slate-600 ${isExporting ? '' : 'truncate'}`}>
-                                                    {row.eWaybill || '—'}
-                                                 </div>
-                                            </td>
-                                            <td className="py-3 px-2 border-r border-slate-100 text-center align-middle">
-                                                <div className={`text-sm font-medium text-slate-600 ${isExporting ? '' : 'truncate'}`}>
-                                                    {row.invoice || '—'}
-                                                </div>
-                                            </td>
-                                            {!isExporting && (
-                                                <td className="py-0 px-1 text-center align-middle">
-                                                    <div className="flex justify-center gap-1">
-                                                        <button onClick={() => handleDuplicateRow(row)} className="p-1.5 text-slate-400 hover:text-indigo-600 hover:bg-indigo-50 rounded transition-colors" title="Duplicate">
-                                                            <DuplicateIcon />
-                                                        </button>
-                                                        <button onClick={() => handleRemoveRow(row.id)} className="p-1.5 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded transition-colors" title="Remove">
-                                                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
-                                                                <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
-                                                            </svg>
-                                                        </button>
-                                                    </div>
-                                                </td>
-                                            )}
                                         </tr>
-                                    ))
-                                )}
-                            </tbody>
-                        </table>
-                    </div>
+                                    ) : (
+                                        rows.map((row, index) => (
+                                            <tr key={row.id} className={`h-[46px] border-t border-[#dcefe8] ${index % 2 ? 'bg-[#f8fbf9]' : 'bg-white'}`}>
+                                                <td className="border-r border-[#dcefe8] px-2 text-center">
+                                                    <span className="inline-flex h-[28px] min-w-[28px] items-center justify-center rounded-lg bg-[#078f67] px-1 text-[11px] font-bold text-white">{String(index + 1).padStart(2, '0')}</span>
+                                                </td>
+                                                <td className="border-r border-[#dcefe8] px-3 text-[14px] font-semibold text-[#14251f]">
+                                                    <div className={`${isExporting ? 'whitespace-pre-wrap break-words' : 'truncate'}`}>{row.van || '-'}</div>
+                                                </td>
+                                                {showVanOut && (
+                                                    <td className="border-r border-[#dcefe8] px-1 text-center text-xs font-medium text-[#b8d7cb]">
+                                                        {row.vanOut || '—'}
+                                                    </td>
+                                                )}
+                                                <td className="border-r border-[#dcefe8] px-1 text-center">
+                                                    <span className="inline-flex min-w-[44px] justify-center rounded-lg bg-[#d8f4e9] px-2 py-1 text-sm font-bold text-[#087a59]">{row.eWaybill || '—'}</span>
+                                                </td>
+                                                <td className="px-1 text-center">
+                                                    <span className="inline-flex min-w-[44px] justify-center rounded-lg bg-[#ffe3e1] px-2 py-1 text-sm font-bold text-[#ec514d]">{row.invoice || '—'}</span>
+                                                </td>
+                                                {!isExporting && (
+                                                    <td className="px-1 text-center">
+                                                        <div className="flex justify-center gap-1">
+                                                            <button onClick={() => handleDuplicateRow(row)} className="rounded p-1 text-slate-400 hover:bg-emerald-50 hover:text-emerald-700" title="Duplicate">
+                                                                <DuplicateIcon />
+                                                            </button>
+                                                            <button onClick={() => handleRemoveRow(row.id)} className="rounded p-1 text-slate-400 hover:bg-red-50 hover:text-red-500" title="Remove">
+                                                                <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" viewBox="0 0 20 20" fill="currentColor">
+                                                                    <path fillRule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clipRule="evenodd" />
+                                                                </svg>
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                )}
+                                            </tr>
+                                        ))
+                                    )}
+                                </tbody>
+                            </table>
+                        </div>
 
-                    {/* Footer */}
-                    <div className="flex flex-col items-end mt-10">
-                        {isExporting ? (
-                            <>
-                                <p className="text-slate-800 text-lg font-bold">{footerName}</p>
-                                {footerSubtitle && <p className="text-slate-500 text-sm mt-0.5 font-medium">{footerSubtitle}</p>}
-                            </>
-                        ) : (
-                            <>
-                                <input 
-                                    type="text" 
-                                    value={footerName} 
-                                    onChange={(e) => setFooterName(e.target.value)}
-                                    className="text-right text-slate-800 text-lg font-bold border-none focus:ring-0 p-0 bg-transparent w-full placeholder-slate-300"
-                                />
-                                <input 
-                                    type="text" 
-                                    value={footerSubtitle} 
-                                    onChange={(e) => setFooterSubtitle(e.target.value)}
-                                    placeholder="Add subtitle..."
-                                    className="text-right text-slate-400 text-sm mt-0.5 font-medium border-none focus:ring-0 p-0 bg-transparent w-full"
-                                />
-                            </>
-                        )}
+                        <div className="px-6 pb-12 pt-6 text-right">
+                            <div className="ml-auto mb-2 h-[2px] w-8 rounded-full bg-[#ff625a]" />
+                            <p className="text-[17px] font-bold text-[#078760]">{footerName}</p>
+                            {footerSubtitle && <p className="mt-1 text-[11px] font-medium tracking-wide text-[#55796c]">{footerSubtitle}</p>}
+                        </div>
                     </div>
                 </div>
             </div>
